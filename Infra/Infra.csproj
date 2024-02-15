@@ -3,17 +3,43 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
+    <PackageId>CleberfBarbosa.$(AssemblyName)</PackageId>
+    <Authors>Cleber Faria Barbosa</Authors>
+    <Title>Base for future projects</Title>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <Copyright>MIT</Copyright>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
-    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.3.1" />
-    <PackageReference Include="Serilog" Version="3.1.1" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.3.1" />    
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.3.1" />
+    <PackageReference Include="NetDevPack.Security.Jwt.AspNetCore" Version="8.1.1" />
+    <PackageReference Include="NetDevPack.Security.Jwt.Core" Version="8.1.1" />
+    <PackageReference Include="NetDevPack.Security.Jwt.Store.EntityFrameworkCore" Version="8.1.1" />
+    <PackageReference Include="NetDevPack.Security.JwtExtensions" Version="7.1.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
+    <PackageReference Include="Serilog.Enrichers.CorrelationId" Version="3.0.1" />
+    <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="readme.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
 
 </Project>
