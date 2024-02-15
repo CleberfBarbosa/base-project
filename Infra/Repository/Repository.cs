@@ -4,61 +4,57 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infra.Repository
 {
-    public class Repository : IRepository
+    public class Repository<T> : IRepository<T> where T : class, IEntity
     {
         private readonly DbContext dbContext;
+        private readonly DbSet<T> dbSet;
 
         public Repository(DbContext dbContext)
         {
             this.dbContext = dbContext;
+            dbSet = this.dbContext.Set<T>();
         }
 
-        IEnumerable<T> IRepository.All<T>()
+        public IEnumerable<T> All()
         {
-            return Table<T>().AsEnumerable();
+            return this.dbSet.AsEnumerable();
         }
 
-        IEntity IRepository.ById<T>(string identifier)
+        public IEntity ById(string identifier)
         {
-            return Table<T>().FirstOrDefault(f => f.Identifier.ToString() == identifier);
+            return this.dbSet.FirstOrDefault(f => f.Identifier.ToString() == identifier);
         }
 
-        IEntity IRepository.ById<T>(long id)
+        public IEntity ById(long id)
         {
-            return Table<T>().FirstOrDefault(f => f.Id == id);
+            return this.dbSet.FirstOrDefault(f => f.Id == id);
         }
 
-        IEnumerable<T> IRepository.Filter<T>(Func<T, bool> expression)
+        public IEnumerable<T> Filter(Func<T, bool> expression)
         {
-            return Table<T>().Where(expression).AsEnumerable();
+            return this.dbSet.Where(expression).AsEnumerable();
         }
 
-        void IRepository.Remove<T>(params T[] entities)
+        public void Remove(params T[] entities)
         {
             if (entities.IsNullOrEmpty())
                 return;
 
-            Table<T>().RemoveRange(entities);
+            this.dbSet.RemoveRange(entities);
             dbContext.SaveChanges();
         }
 
-        IEnumerable<T> IRepository.Upsert<T>(params T[] entities)
+        public IEnumerable<T> Upsert(params T[] entities)
         {
             if (entities.IsNullOrEmpty())
                 return new List<T>();
 
             var updateList = entities.Where(n => n.Id > 0)?.ToArray() ?? Array.Empty<T>();
             var insertList = entities.Where(n => n.Id <= 0)?.ToArray() ?? Array.Empty<T>();
-            Table<T>().UpdateRange(updateList);
-            Table<T>().AddRange(insertList);
+            this.dbSet.UpdateRange(updateList);
+            this.dbSet.AddRange(insertList);
             dbContext.SaveChanges();
             return insertList.Concat(updateList);
-        }
-
-        private DbSet<T> Table<T>()
-            where T : class, IEntity
-        {
-            return dbContext.Set<T>();
         }
     }
 }
